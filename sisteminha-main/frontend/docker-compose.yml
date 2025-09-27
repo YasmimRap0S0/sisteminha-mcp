@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: sisteminha/compose-frontend:latest
+    container_name: compose-frontend
+    ports:
+      - "3002:80"
