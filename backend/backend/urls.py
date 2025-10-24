@@ -4,17 +4,9 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework import permissions
 from django.conf import settings
-from sisteminha.views import * # type: ignore
-
-
-
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
-
-# Imports explícitos das Views para evitar problemas de importação
 from sisteminha.views import (
     UserViewSet, DesenvolvedorViewSet, MicroempreendedorViewSet,
     Avaliacao_DesenvolvedorViewSet, Avaliacao_SistemaViewSet,
@@ -23,6 +15,10 @@ from sisteminha.views import (
     DesenvolvedorRegistrationView, DesenvolvedorLoginView,
     MicroempreendedorRegistrationView, MicroempreendedorLoginView
 )
+
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 # Configuração da documentação Swagger
 schema_view = get_schema_view(
@@ -75,8 +71,8 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
-    # Rota opcional para evitar erro 404 na raiz (`/`)
-    path('', lambda request: HttpResponse("API Sisteminha rodando!"), name="home"),
+    # Rota principal para servir o frontend
+    path("", TemplateView.as_view(template_name="index.html"), name="home"),
 ]
 
 # Configuração para servir arquivos de mídia em ambiente de desenvolvimento

@@ -107,6 +107,12 @@ TEMPLATES = [
     },
 ]
 
+# Servir o frontend buildado (React, Vue, etc)
+TEMPLATES[0]["DIRS"] = [os.path.join(BASE_DIR, "../frontend/build")]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "../frontend/build/static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 
@@ -168,7 +174,3 @@ MEDIA_ROOT = BASE_DIR / 'media'  # Diretório para armazenar arquivos de mídia
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-import sys
-
-if 'test' in sys.argv:
-    DATABASES['default'] = DATABASES['sqlite']
