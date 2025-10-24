@@ -1,38 +1,33 @@
-"""
-FastMCP quickstart example.
-
-cd to the `examples/snippets/clients` directory and run:
-    uv run server fastmcp_quickstart stdio
-"""
-
+# server_mcp.py
 from mcp.server.fastmcp import FastMCP
+import requests
 
-# Create an MCP server
-mcp = FastMCP("SISTEMINHA-MCP")
+# Cria o servidor MCP
+mcp = FastMCP("sisteminha")
 
-
-# Add an addition tool
+# Tool: buscar dados da API Django
 @mcp.tool()
-def add(a: int, b: int) -> int:
-    """Add two numbers"""
-    return a + b
+def buscar_usuario(user_id: int):
+    """Busca dados de um usuário via API Django"""
+    resp = requests.get(f"http://localhost:8000/api/usuarios/{user_id}/")
+    if resp.status_code != 200:
+        return {"erro": f"Falha ao buscar usuário {user_id}"}
+    return resp.json()
 
+# Tool: criar novo registro
+@mcp.tool()
+def criar_usuario(nome: str, email: str):
+    """Cria um novo usuário via API Django"""
+    resp = requests.post("http://localhost:8000/api/usuarios/", json={
+        "nome": nome,
+        "email": email
+    })
+    return resp.json()
 
-# Add a dynamic greeting resource
-@mcp.resource("greeting://{name}")
-def get_greeting(name: str) -> str:
-    """Get a personalized greeting"""
-    return f"Hello, {name}!"
-
-
-# Add a prompt
+# Prompt: gerar instruções de uso
 @mcp.prompt()
-def greet_user(name: str, style: str = "friendly") -> str:
-    """Generate a greeting prompt"""
-    styles = {
-        "friendly": "Please write a warm, friendly greeting",
-        "formal": "Please write a formal, professional greeting",
-        "casual": "Please write a casual, relaxed greeting",
-    }
+def instrucoes():
+    return "Você pode usar as ferramentas 'buscar_usuario' e 'criar_usuario'."
 
-    return f"{styles.get(style, styles['friendly'])} for someone named {name}."
+if __name__ == "__main__":
+    mcp.serve()  # inicia o servidor MCP corretamente
