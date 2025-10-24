@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
 
+    # MCP
+    'mcp_server',
+
      # Aplicação de autenticação
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
@@ -113,12 +116,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sisteminha_db',
-        'USER': 'sisteminha',
-        'PASSWORD': 'k1KaAnEk3fBEe8WDORau4dh9wfWuB2g9',  
-        'HOST': 'dpg-d1rocbidbo4c738df0gg-a.oregon-postgres.render.com',
+        'NAME': 'sisteminha',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost', # IP_WSL: localhost | 172.18.176.1
         'PORT': '5432',
     },
+    
      'sqlite': {  # SQLite
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / "db.sqlite3",
